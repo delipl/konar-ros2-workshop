@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 
 <robot name="robot" xmlns:xacro="http://ros.org/wiki/xacro">
-
-    <link name="base_footprint">
+    <xacro:include filename="$(find robot_description)/resource/macros.urdf.xacro" />
+    <link name="base_link">
+        <xacro:box_inertia m="0" w="0" d="0" h="0"/>
     </link>
 
-    <link name="base_link">
+    <link name="body_link">
         <visual>
             <geometry>
                 <box size="1.0 1.0 1.0" />
@@ -16,11 +17,12 @@
                 <box size="1.0 1.0 1.0" />
             </geometry>
         </collision>
+        <xacro:box_inertia m="1" w="1" d="1" h="1"/>
     </link>
 
     <joint name="base_joint" type="fixed">
         <parent link="base_link" />
-        <child link="base_footprint" />
+        <child link="body_link" />
         <origin xyz="0.0 0.0 1.0" rpy="0 0 0" />
     </joint>
 </robot>
