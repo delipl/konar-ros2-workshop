@@ -1,11 +1,11 @@
-FROM althack/ros2:humble-dev 
+FROM althack/ros2:foxy-dev 
 
 # ** [Optional] Uncomment this section to install additional packages. **
 #
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
-   && apt-get -y install --no-install-recommends ros-humble-xacro ros-humble-robot-localization \
-                ros-humble-slam-toolbox ros-humble-desktop\
+   && apt-get -y install --no-install-recommends ros-foxy-xacro ros-foxy-robot-localization \
+                ros-foxy-slam-toolbox ros-foxy-desktop ros-foxy-joint-state-publisher \
    #
    # Clean up
    && pip install setuptools==58.2.0 \
