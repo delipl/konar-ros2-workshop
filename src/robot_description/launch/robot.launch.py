@@ -50,8 +50,7 @@ def generate_launch_description():
         # Run Gazebo
         ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so'], output='screen'),
         joint_state_publisher_node,
+        # joint_state_publisher_gui_node,
         robot_state_publisher_node,
         spawn_robot,
-        # joint_state_publisher_gui_node,
-
     ])

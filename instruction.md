@@ -4,6 +4,10 @@
 kill $(ps -aux | grep gzserver | cut -d" " -f 2)
 ```
 
+## Joy
+```bash
+ros2 launch teleop_twist_joy teleop-launch.py joy_config:='xbox'
+```
 # Instruction
 ## Step 1
 Add to `~/.bashrc` these lines (change `<number>` to your computer number):

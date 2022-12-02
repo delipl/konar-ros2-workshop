@@ -7,7 +7,7 @@
     <xacro:property name="base_width" value="0.31" />
     <xacro:property name="base_length" value="0.42" />
     <xacro:property name="base_height" value="0.18" />
-    <xacro:property name="base_mass" value="1.0" />
+    <xacro:property name="base_mass" value="5.0" />
 
     <xacro:property name="wheel_radius" value="0.10" />
     <xacro:property name="wheel_width" value="0.04" />
@@ -67,6 +67,11 @@
             <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0" />
             <axis xyz="0 1 0" />
         </joint>
+        <gazebo reference="${prefix}_link">
+            <mu1 value="10.0" />
+            <mu2 value="10.0" />
+        <material>Gazebo/Black</material>
+    </gazebo>
     </xacro:macro>
 
 
@@ -96,6 +101,8 @@
         <origin xyz="${caster_xoff} 0.0 ${-(base_height/2)}" rpy="0 0 0" />
     </joint>
 
+    
+
     <link name="lidar_link">
 
         <collision>
@@ -121,8 +128,9 @@
     </joint>
 
     <gazebo reference="front_caster">
-        <mu>0.0</mu>
-        <mu2>0.0</mu2>
+        <mu1 value="0.00000001" />
+        <mu2 value="0.00000001" />
+        <material>Gazebo/Black</material>
     </gazebo>
 
     <gazebo>
@@ -136,8 +144,8 @@
             <wheel_diameter>0.2</wheel_diameter>
 
             <!-- limits -->
-            <max_wheel_torque>20</max_wheel_torque>
-            <max_wheel_acceleration>1.0</max_wheel_acceleration>
+            <max_wheel_torque>40</max_wheel_torque>
+            <max_wheel_acceleration>2.0</max_wheel_acceleration>
 
             <!-- output -->
             <publish_odom>true</publish_odom>
