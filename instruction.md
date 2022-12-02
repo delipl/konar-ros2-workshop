@@ -32,7 +32,7 @@ ros2 launch robot_description robot.launch.py
 You should see in the terminal:
 ```bash
 got segment base_link
-got segment body_link
+got segment base_link
 ```
 
 ## Step 5 
@@ -58,7 +58,7 @@ Add robot properites to `urdf`.
 ```
 
 ## Step 7 
-Add property box to `body_link`
+Add property box to `base_link`
 ```xml
 <geometry>
         <box size="${base_length} ${base_width} ${base_height}" />
@@ -89,7 +89,7 @@ Create wheel macro
         </link>
 
         <joint name="${prefix}_joint" type="continuous">
-            <parent link="body_link"/>
+            <parent link="base_link"/>
             <child link="${prefix}_link"/>
             <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0"/>
             <axis xyz="0 1 0"/>
@@ -130,7 +130,7 @@ Add support wheel.
 </link>
 
 <joint name="caster_joint" type="fixed">
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="front_caster"/>
         <origin xyz="${caster_xoff} 0.0 ${-(base_height/2)}" rpy="0 0 0"/>
 </joint>
@@ -164,11 +164,14 @@ Add diff drive controller
 
             <!-- output -->
             <publish_odom>true</publish_odom>
-            <publish_odom_tf>false</publish_odom_tf>
+            <publish_odom_tf>true</publish_odom_tf>
             <publish_wheel_tf>true</publish_wheel_tf>
 
             <odometry_frame>odom</odometry_frame>
-            <robot_base_frame>body_link</robot_base_frame>
+            <robot_base_frame>base_link</robot_base_frame>
         </plugin>
     </gazebo>
 ```
+
+## Step 15
+Add lidar
