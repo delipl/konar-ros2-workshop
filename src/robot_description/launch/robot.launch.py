@@ -48,9 +48,9 @@ def generate_launch_description():
         DeclareLaunchArgument(name='use_sim_time', default_value='True',
                                             description='Flag to enable use_sim_time'),
         # Run Gazebo
-        ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so'], output='screen'),
-        joint_state_publisher_node,
+        # ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so'], output='screen'),
+        # joint_state_publisher_node,
         # joint_state_publisher_gui_node,
         robot_state_publisher_node,
-        spawn_robot,
+        # spawn_robot,
     ])
