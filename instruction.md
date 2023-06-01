@@ -8,6 +8,15 @@ kill $(ps -aux | grep gzserver | cut -d" " -f 2)
 ```bash
 ros2 launch teleop_twist_joy teleop-launch.py joy_config:='xbox'
 ```
+
+# Prerequirements
+Before install all packages!
+```
+sudo apt install python3-rosdep
+rosdep init
+rosdep update --rosdistro humble
+rosdep install -i --from-path src --rosdistro humble -y
+```
 # Instruction
 ## Step 1
 Add to `~/.bashrc` these lines (change `<number>` to your computer number):
@@ -16,7 +25,8 @@ export ROS_DOMAIN_ID=<number>
 source /opt/ros/foxy/setup.bash
 
 ```
-This allows you to use `ros2` commands. 
+This allows you to use `ros2` commands.
+
 
 ## Step 2 
 Try build and launch empty setup:
@@ -35,7 +45,7 @@ ros2 launch robot_description robot.launch.py
 ```
 You should see in the terminal:
 ```bash
-got segment base_link
+got segment base_footprint
 got segment base_link
 ```
 
@@ -49,24 +59,57 @@ rviz2
 Add robot properites to `urdf`.
 
 ```xml
-<xacro:property name="base_width" value="0.31"/>
-<xacro:property name="base_length" value="0.42"/>
-<xacro:property name="base_height" value="0.18"/>
-<xacro:property name="base_mass" value="1.0"/>
+<xacro:property name="base_width" value="0.31" />
+<xacro:property name="base_length" value="0.42" />
+<xacro:property name="base_height" value="0.18" />
+<xacro:property name="base_mass" value="1.0" />
 
-<xacro:property name="wheel_radius" value="0.10"/>
-<xacro:property name="wheel_width" value="0.04"/>
-<xacro:property name="wheel_ygap" value="0.025"/>
-<xacro:property name="wheel_zoff" value="0.05"/>
-<xacro:property name="wheel_xoff" value="0.12"/>
+<xacro:property name="wheel_radius" value="0.10" />
+<xacro:property name="wheel_width" value="0.04" />
+<xacro:property name="wheel_ygap" value="0.025" />
+<xacro:property name="wheel_zoff" value="0.05" />
+<xacro:property name="wheel_xoff" value="0.12" />
+<xacro:property name="wheel_mass" value="0.5" />
+
+<xacro:property name="caster_xoff" value="0.15" />
+<xacro:property name="caster_mass" value="0.10" />
+
 ```
-
-## Step 7 
-Add property box to `base_link`
+and change `base_link` to `base_footprint` joint
 ```xml
-<geometry>
-        <box size="${base_length} ${base_width} ${base_height}" />
-</geometry>
+<joint name="base_joint" type="fixed">
+    <parent link="base_footprint" />
+    <child link="base_link" />
+    <origin xyz="0.0 0.0  ${wheel_radius + base_height/2}" rpy="0 0 0" />
+</joint>
+```
+## Step 7 
+Add property box to `base_link`.
+Change:
+```xml
+<visual>
+    <geometry>
+        <box size="1.0 1.0 1.0" />
+    </geometry>
+</visual>
+<collision>
+    <geometry>
+        <box size="1.0 1.0 1.0" />
+    </geometry>
+</collision>
+```
+to:
+```xml
+<visual>
+    <geometry>
+            <box size="${base_length} ${base_width} ${base_height}" />
+    </geometry>
+</visual>
+<collision>
+    <geometry>
+            <box size="${base_length} ${base_width} ${base_height}" />
+    </geometry>
+</collision>
 ```
 
 ## Step 8
@@ -92,7 +135,7 @@ Create wheel macro
             <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}"/>
         </link>
 
-        <joint name="${prefix}_joint" type="continuous">
+        <joint name="${prefix}_joint" type="fixed">
             <parent link="base_link"/>
             <child link="${prefix}_link"/>
             <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0"/>
@@ -109,10 +152,10 @@ Added wheels
 ```
 
 ## Step 10
-Change wheel joint type to `continuous`
+Change wheel joint type to `continuous` in `macro:wheel`.
 ## Step 11
-Launch `joint_state_publisher_gui`. Return `joint_state_publisher_gui_node` in launch file. 
-
+Launch `joint_state_publisher_gui`. Return `joint_state_publisher_gui_node` in launch file `robot.launch.py`.
+You can move wheels in the gui.
 ## Step 12
 Add support wheel.
 ```xml
@@ -130,7 +173,7 @@ Add support wheel.
                 <geometry>
                 <sphere radius="${(wheel_radius+wheel_zoff-(base_height/2))}"/>
                 </geometry>
-        </collision>    
+        </collision>
 </link>
 
 <joint name="caster_joint" type="fixed">
@@ -177,5 +220,86 @@ Add diff drive controller
     </gazebo>
 ```
 
-## Step 15
+# Step 15
+Before running the simulation you have to add interia to the all links. Look at the wheel macro there you
+will see the `cylinder_intertia`
+Add to the `base_link`:
+```xml
+<xacro:box_inertia m="${base_mass}" w="${base_width}" d="${base_length}" h="${base_height}"/>
+
+```
+and to the `front_caster`
+```xml
+<xacro:sphere_inertia m="${caster_mass}" r="${(wheel_radius+wheel_zoff-(base_height/2))}" />
+```
+# Step 16
+Comment in launch file  `joint_state_publisher_gui_node` line and uncomment `ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so'], output='screen'),`, `joint_state_publisher_gui` and `spawn_robot`
+You should see the simulation
+## Step 17
+Teleop now you can use `teleop_twist_keyboard` and drive the robot the `i`, `j`, `l` and `,` keys:
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+# Kontynuacja na zajęciach
+## Step 18 
 Add lidar
+```xml
+<link name="lidar_link">
+    <xacro:cylinder_inertia m="0.1" r="0.0508" h="0.055" />
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+            <cylinder radius="0.0508" length="0.055" />
+        </geometry>
+    </collision>
+
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+            <cylinder radius="0.0508" length="0.055" />
+        </geometry>
+    </visual>
+</link>
+
+<joint name="lidar_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="lidar_link" />
+    <origin xyz="0 0 ${base_height/2 + 0.0225}" rpy="0 0 0" />
+</joint>
+
+<gazebo reference="lidar_link">
+    <sensor name="lidar" type="ray">
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <update_rate>5</update_rate>
+        <ray>
+            <scan>
+                <horizontal>
+                    <samples>360</samples>
+                    <resolution>1.000000</resolution>
+                    <min_angle>0.000000</min_angle>
+                    <max_angle>6.280000</max_angle>
+                </horizontal>
+            </scan>
+            <range>
+                <min>0.120000</min>
+                <max>3.5</max>
+                <resolution>0.015000</resolution>
+            </range>
+            <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.01</stddev>
+            </noise>
+        </ray>
+        <plugin name="scan" filename="libgazebo_ros_ray_sensor.so">
+            <ros>
+                <remapping>~/out:=scan</remapping>
+            </ros>
+            <output_type>sensor_msgs/LaserScan</output_type>
+            <frame_name>lidar_link</frame_name>
+        </plugin>
+    </sensor>
+</gazebo>
+```
+Launch simulation and look at the RViz
