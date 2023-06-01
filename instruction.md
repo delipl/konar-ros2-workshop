@@ -303,3 +303,17 @@ Add lidar
 </gazebo>
 ```
 Launch simulation and look at the RViz
+
+
+# Step 19
+Add obstacles in gazebo
+
+# Step 20
+
+```bash
+sudo apt install ros-humble-nav2-bringup
+```
+Mapping:
+```bash
+ros2 launch nav2_bringup slam_launch.py
+```
