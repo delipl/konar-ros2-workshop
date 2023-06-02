@@ -100,26 +100,17 @@
     </gazebo>
 
     <gazebo>
-        <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
-            <!-- wheels -->
-            <left_joint>drivewhl_l_joint</left_joint>
-            <right_joint>drivewhl_r_joint</right_joint>
+        <plugin filename="libSimpleTrackedVehiclePlugin.so" name="simple_tracked_vehicle">
+            <body>base_link</body>
+            <left_track>left_track</left_track>
+            <right_track>right_track</right_track>
+            <track_mu>2</track_mu>
+            <track_mu2>0.5</track_mu2>
+        </plugin>
 
-            <!-- kinematics -->
-            <wheel_separation>0.4</wheel_separation>
-            <wheel_diameter>0.2</wheel_diameter>
-
-            <!-- limits -->
-            <max_wheel_torque>20</max_wheel_torque>
-            <max_wheel_acceleration>1.0</max_wheel_acceleration>
-
-            <!-- output -->
-            <publish_odom>true</publish_odom>
-            <publish_odom_tf>true</publish_odom_tf>
-            <publish_wheel_tf>true</publish_wheel_tf>
-
-            <odometry_frame>odom</odometry_frame>
-            <robot_base_frame>base_footprint</robot_base_frame>
+        <plugin filename="libKeysToCmdVelPlugin.so" name="keyboard_control">
+            <publish_as_twist>true</publish_as_twist>
+            <cmd_vel_topic>~/simple_tracked/cmd_vel_twist</cmd_vel_topic>
         </plugin>
     </gazebo>
 
