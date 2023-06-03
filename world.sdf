@@ -90,300 +90,6 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='my_robot'>
-      <link name='base_footprint'>
-        <inertial>
-          <pose>0.0125 0 0.191875 0 -0 0</pose>
-          <mass>1.2</mass>
-          <inertia>
-            <ixx>0.0130135</ixx>
-            <ixy>1.89559e-18</ixy>
-            <ixz>0.00137812</ixz>
-            <iyy>0.0218069</iyy>
-            <iyz>-1.1135e-20</iyz>
-            <izz>0.0250046</izz>
-          </inertia>
-        </inertial>
-        <collision name='base_footprint_fixed_joint_lump__base_link_collision'>
-          <pose>0 0 0.19 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.42 0.31 0.18</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <collision name='base_footprint_fixed_joint_lump__front_caster_collision_1'>
-          <pose>0.15 0 0.1 0 -0 0</pose>
-          <geometry>
-            <sphere>
-              <radius>0.06</radius>
-            </sphere>
-          </geometry>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <friction>
-              <ode>
-                <mu2>0.001</mu2>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <collision name='base_footprint_fixed_joint_lump__lidar_link_collision_2'>
-          <pose>0 0 0.3025 0 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.055</length>
-              <radius>0.0508</radius>
-            </cylinder>
-          </geometry>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <friction>
-              <ode/>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <visual name='base_footprint_fixed_joint_lump__base_link_visual'>
-          <pose>0 0 0.19 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.42 0.31 0.18</size>
-            </box>
-          </geometry>
-        </visual>
-        <visual name='base_footprint_fixed_joint_lump__front_caster_visual_1'>
-          <pose>0.15 0 0.1 0 -0 0</pose>
-          <geometry>
-            <sphere>
-              <radius>0.06</radius>
-            </sphere>
-          </geometry>
-        </visual>
-        <visual name='base_footprint_fixed_joint_lump__lidar_link_visual_2'>
-          <pose>0 0 0.3025 0 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.055</length>
-              <radius>0.0508</radius>
-            </cylinder>
-          </geometry>
-        </visual>
-        <sensor name='lidar' type='ray'>
-          <always_on>1</always_on>
-          <visualize>1</visualize>
-          <update_rate>5</update_rate>
-          <ray>
-            <scan>
-              <horizontal>
-                <samples>360</samples>
-                <resolution>1</resolution>
-                <min_angle>0</min_angle>
-                <max_angle>6.28</max_angle>
-              </horizontal>
-              <vertical>
-                <samples>1</samples>
-                <min_angle>0</min_angle>
-                <max_angle>0</max_angle>
-              </vertical>
-            </scan>
-            <range>
-              <min>0.12</min>
-              <max>3.5</max>
-              <resolution>0.015</resolution>
-            </range>
-            <noise>
-              <type>gaussian</type>
-              <mean>0</mean>
-              <stddev>0.01</stddev>
-            </noise>
-          </ray>
-          <plugin name='scan' filename='libgazebo_ros_ray_sensor.so'>
-            <ros>
-              <remapping>~/out:=scan</remapping>
-            </ros>
-            <output_type>sensor_msgs/LaserScan</output_type>
-            <frame_name>lidar_link</frame_name>
-          </plugin>
-          <pose>0 0 0.3025 0 -0 0</pose>
-        </sensor>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-        <mu>0.001</mu>
-      </link>
-      <joint name='drivewhl_l_joint' type='revolute'>
-        <pose relative_to='base_footprint'>-0.12 0.18 0.14 0 -0 0</pose>
-        <parent>base_footprint</parent>
-        <child>drivewhl_l_link</child>
-        <axis>
-          <xyz>0 1 0</xyz>
-          <limit>
-            <lower>-1e+16</lower>
-            <upper>1e+16</upper>
-          </limit>
-          <dynamics>
-            <spring_reference>0</spring_reference>
-            <spring_stiffness>0</spring_stiffness>
-          </dynamics>
-        </axis>
-      </joint>
-      <link name='drivewhl_l_link'>
-        <pose relative_to='drivewhl_l_joint'>0 0 0 0 -0 0</pose>
-        <inertial>
-          <pose>0 0 0 1.5708 -0 0</pose>
-          <mass>0.5</mass>
-          <inertia>
-            <ixx>0.00131667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.00131667</iyy>
-            <iyz>0</iyz>
-            <izz>0.0025</izz>
-          </inertia>
-        </inertial>
-        <collision name='drivewhl_l_link_collision'>
-          <pose>0 0 0 1.5708 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.04</length>
-              <radius>0.1</radius>
-            </cylinder>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='drivewhl_l_link_visual'>
-          <pose>0 0 0 1.5708 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.04</length>
-              <radius>0.1</radius>
-            </cylinder>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <joint name='drivewhl_r_joint' type='revolute'>
-        <pose relative_to='base_footprint'>-0.12 -0.18 0.14 0 -0 0</pose>
-        <parent>base_footprint</parent>
-        <child>drivewhl_r_link</child>
-        <axis>
-          <xyz>0 1 0</xyz>
-          <limit>
-            <lower>-1e+16</lower>
-            <upper>1e+16</upper>
-          </limit>
-          <dynamics>
-            <spring_reference>0</spring_reference>
-            <spring_stiffness>0</spring_stiffness>
-          </dynamics>
-        </axis>
-      </joint>
-      <link name='drivewhl_r_link'>
-        <pose relative_to='drivewhl_r_joint'>0 0 0 0 -0 0</pose>
-        <inertial>
-          <pose>0 0 0 1.5708 -0 0</pose>
-          <mass>0.5</mass>
-          <inertia>
-            <ixx>0.00131667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.00131667</iyy>
-            <iyz>0</iyz>
-            <izz>0.0025</izz>
-          </inertia>
-        </inertial>
-        <collision name='drivewhl_r_link_collision'>
-          <pose>0 0 0 1.5708 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.04</length>
-              <radius>0.1</radius>
-            </cylinder>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='drivewhl_r_link_visual'>
-          <pose>0 0 0 1.5708 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.04</length>
-              <radius>0.1</radius>
-            </cylinder>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <static>0</static>
-      <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
-        <left_joint>drivewhl_l_joint</left_joint>
-        <right_joint>drivewhl_r_joint</right_joint>
-        <wheel_separation>0.4</wheel_separation>
-        <wheel_diameter>0.2</wheel_diameter>
-        <max_wheel_torque>20</max_wheel_torque>
-        <max_wheel_acceleration>1.0</max_wheel_acceleration>
-        <publish_odom>1</publish_odom>
-        <publish_odom_tf>1</publish_odom_tf>
-        <publish_wheel_tf>1</publish_wheel_tf>
-        <odometry_frame>odom</odometry_frame>
-        <robot_base_frame>base_footprint</robot_base_frame>
-      </plugin>
-      <pose>0 0 0 0 -0 0</pose>
-    </model>
     <model name='unit_cylinder'>
       <pose>-1.78778 -0.521388 0.5 0 -0 0</pose>
       <link name='link'>
@@ -548,10 +254,10 @@
       </link>
     </model>
     <state world_name='default'>
-      <sim_time>773 835000000</sim_time>
-      <real_time>756 985376774</real_time>
-      <wall_time>1685637652 103253515</wall_time>
-      <iterations>754642</iterations>
+      <sim_time>811 372000000</sim_time>
+      <real_time>37 730184367</real_time>
+      <wall_time>1685814426 439459918</wall_time>
+      <iterations>37537</iterations>
       <model name='Lamp Post'>
         <pose>-0.885425 0.49514 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -583,60 +289,38 @@
         </link>
       </model>
       <model name='mass_on_rails'>
-        <pose>-1.19749 -1.5872 -0 0 0 -2e-05</pose>
+        <pose>-1.19749 -1.5872 -0 0 -0 -2.8e-05</pose>
         <scale>1 1 1</scale>
         <link name='base'>
-          <pose>-1.19749 -1.5872 -0 0 0 -2e-05</pose>
-          <velocity>-0 -0 0.000963 0.012835 2e-06 0</velocity>
-          <acceleration>-0.000135 -5e-06 1.92509 0.538556 0.00067 0.001703</acceleration>
-          <wrench>-0.013497 -0.000453 192.509 0 -0 0</wrench>
+          <pose>-1.19749 -1.5872 -0 0 -0 -2.8e-05</pose>
+          <velocity>0 -0 0.001029 0.013727 -2e-06 0</velocity>
+          <acceleration>0.000136 -6e-06 2.05883 2.32165 -0.001803 -0.001717</acceleration>
+          <wrench>0.013623 -0.000623 205.883 0 -0 0</wrench>
         </link>
         <link name='mass'>
-          <pose>-1.19749 -1.5872 -0 0 0 -2e-05</pose>
-          <velocity>0 -0 -0.001284 0.012835 -0 0</velocity>
-          <acceleration>-0.000153 -2.5672 -2.56695 0.538694 -0.001534 -0.000107</acceleration>
-          <wrench>-1.5e-05 -0.25672 -0.256695 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='my_robot'>
-        <pose>0.270802 0.002767 -0.040001 -1e-06 9e-06 -0.017061</pose>
-        <scale>1 1 1</scale>
-        <link name='base_footprint'>
-          <pose>0.270802 0.002767 -0.040001 -1e-06 9e-06 -0.017061</pose>
-          <velocity>-0.000751 -1.3e-05 0.000449 0.000338 0.018359 -0.000224</velocity>
-          <acceleration>4.24509 -0.140384 1.57506 -3.07728 0.062962 3.06249</acceleration>
-          <wrench>5.0941 -0.168461 1.89008 0 -0 0</wrench>
-        </link>
-        <link name='drivewhl_l_link'>
-          <pose>0.153892 0.184788 0.1 -2e-06 0.122501 -0.017061</pose>
-          <velocity>0.001859 -2.5e-05 0.002659 0.000249 0.018593 -0.00018</velocity>
-          <acceleration>2.7915 -0.08702 5.3195 2.64429 -0.182153 3.10181</acceleration>
-          <wrench>1.39575 -0.04351 2.65975 0 -0 0</wrench>
-        </link>
-        <link name='drivewhl_r_link'>
-          <pose>0.14775 -0.17516 0.1 -2e-06 0.096804 -0.017061</pose>
-          <velocity>0.001797 -2.4e-05 0.002646 0.000244 0.017972 -0.000158</velocity>
-          <acceleration>2.78169 -0.085195 5.29156 2.62659 0.437614 3.12676</acceleration>
-          <wrench>1.39084 -0.042597 2.64578 0 -0 0</wrench>
+          <pose>-1.19749 -1.5872 -0 0 -0 -2.8e-05</pose>
+          <velocity>-0 -0 -0.001373 0.013726 -1e-06 0</velocity>
+          <acceleration>3.8e-05 -2.74552 -2.74527 2.32184 0.000423 6.7e-05</acceleration>
+          <wrench>4e-06 -0.274552 -0.274527 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_cylinder'>
-        <pose>-1.79169 -0.515066 0.508123 -0.013868 -0.008721 0.000154</pose>
+        <pose>-1.7915 -0.515103 0.508127 -0.014232 -0.008168 -0.000197</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>-1.79169 -0.515066 0.508123 -0.013868 -0.008721 0.000154</pose>
+          <pose>-1.7915 -0.515103 0.508127 -0.014232 -0.008168 -0.000197</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>2.95433 -4.11908 4.98623 1.92868 -0.41555 0.013907</acceleration>
-          <wrench>2.95433 -4.11908 4.98623 0 -0 0</wrench>
+          <acceleration>0 0 -9.8 0 -1e-06 0</acceleration>
+          <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_cylinder_0'>
-        <pose>-0.091463 1.8471 0.499992 -3e-06 -4e-06 -0</pose>
+        <pose>-0.091459 1.8471 0.499992 -4e-06 4e-06 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>-0.091463 1.8471 0.499992 -3e-06 -4e-06 -0</pose>
+          <pose>-0.091459 1.8471 0.499992 -4e-06 4e-06 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <acceleration>0 0 -9.8 -0 -0 -0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
