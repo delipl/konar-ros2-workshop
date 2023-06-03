@@ -1,5 +1,3 @@
-# Instruction
-The workshop is based on [nav2_tutorials](https://navigation.ros.org/setup_guides/index.html).
 # Usefull commands
 ## Kill gazebo server
 ```bash
@@ -19,7 +17,7 @@ rosdep init
 rosdep update --rosdistro humble
 rosdep install -i --from-path src --rosdistro humble -y
 ```
-# Instruction (first class)
+# Instruction
 ## Step 1
 Add to `~/.bashrc` these lines (change `<number>` to your computer number):
 ```bash
@@ -30,7 +28,7 @@ source /opt/ros/foxy/setup.bash
 This allows you to use `ros2` commands.
 
 
-## Step 2
+## Step 2 
 Try build and launch empty setup:
 ```bash
 # Building:
@@ -198,28 +196,28 @@ Remove friction from caster wheel
 Add diff drive controller
 ```xml
  <gazebo>
-    <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
-        <!-- wheels -->
-        <left_joint>drivewhl_l_joint</left_joint>
-        <right_joint>drivewhl_r_joint</right_joint>
+        <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
+            <!-- wheels -->
+            <left_joint>drivewhl_l_joint</left_joint>
+            <right_joint>drivewhl_r_joint</right_joint>
 
-        <!-- kinematics -->
-        <wheel_separation>0.4</wheel_separation>
-        <wheel_diameter>0.2</wheel_diameter>
+            <!-- kinematics -->
+            <wheel_separation>0.4</wheel_separation>
+            <wheel_diameter>0.2</wheel_diameter>
 
-        <!-- limits -->
-        <max_wheel_torque>20</max_wheel_torque>
-        <max_wheel_acceleration>1.0</max_wheel_acceleration>
+            <!-- limits -->
+            <max_wheel_torque>20</max_wheel_torque>
+            <max_wheel_acceleration>1.0</max_wheel_acceleration>
 
-        <!-- output -->
-        <publish_odom>true</publish_odom>
-        <publish_odom_tf>true</publish_odom_tf>
-        <publish_wheel_tf>true</publish_wheel_tf>
+            <!-- output -->
+            <publish_odom>true</publish_odom>
+            <publish_odom_tf>true</publish_odom_tf>
+            <publish_wheel_tf>true</publish_wheel_tf>
 
-        <odometry_frame>odom</odometry_frame>
-        <robot_base_frame>base_footprint</robot_base_frame>
-    </plugin>
-</gazebo>
+            <odometry_frame>odom</odometry_frame>
+            <robot_base_frame>base_link</robot_base_frame>
+        </plugin>
+    </gazebo>
 ```
 
 # Step 15
@@ -242,7 +240,7 @@ Teleop now you can use `teleop_twist_keyboard` and drive the robot the `i`, `j`,
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
-# Second class
+# Kontynuacja na zajęciach
 ## Step 18 
 Add lidar
 ```xml
@@ -307,10 +305,10 @@ Add lidar
 Launch simulation and look at the RViz
 
 
-## Step 19
+# Step 19
 Add obstacles in gazebo
 
-## Step 20
+# Step 20
 
 ```bash
 sudo apt install ros-humble-nav2-bringup
@@ -319,183 +317,3 @@ Mapping:
 ```bash
 ros2 launch nav2_bringup slam_launch.py
 ```
-
-# Third class
-As you noticed the map is not qualitative. It came from the robot's odometry base on encoders.
-Now we will be working on getting better odometry with the IMU sensor and extended kalman filter.
-## Step 21
-Add the `imu_link` to the robot. The best it to add the imu to the center of the robot. Try to make new `urdf.xacro` file and make imu macro. Look at the wheel macro.
-```xml
-<link name="imu_link">
-  <visual>
-    <geometry>
-      <box size="0.1 0.1 0.1"/>
-    </geometry>
-  </visual>
-
-  <collision>
-    <geometry>
-      <box size="0.1 0.1 0.1"/>
-    </geometry>
-  </collision>
-
-  <xacro:box_inertia m="0.1" w="0.1" d="0.1" h="0.1"/>
-</link>
-
-<joint name="imu_joint" type="fixed">
-  <parent link="base_link"/>
-  <child link="imu_link"/>
-  <origin xyz="0 0 0.01"/>
-</joint>
-
- <gazebo reference="imu_link">
-  <sensor name="imu_sensor" type="imu">
-   <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-      <ros>
-        <namespace></namespace>
-        <remapping>~/out:=imu</remapping>
-      </ros>
-      <initial_orientation_as_reference>false</initial_orientation_as_reference>
-    </plugin>
-    <always_on>true</always_on>
-    <update_rate>100</update_rate>
-    <visualize>true</visualize>
-    <imu>
-      <angular_velocity>
-        <x>
-          <noise type="gaussian">
-            <mean>0.0</mean>
-            <stddev>2e-4</stddev>
-            <bias_mean>0.0000075</bias_mean>
-            <bias_stddev>0.0000008</bias_stddev>
-          </noise>
-        </x>
-        <y>
-          <noise type="gaussian">
-            <mean>0.0</mean>
-            <stddev>2e-4</stddev>
-            <bias_mean>0.0000075</bias_mean>
-            <bias_stddev>0.0000008</bias_stddev>
-          </noise>
-        </y>
-        <z>
-          <noise type="gaussian">
-            <mean>0.0</mean>
-            <stddev>2e-4</stddev>
-            <bias_mean>0.0000075</bias_mean>
-            <bias_stddev>0.0000008</bias_stddev>
-          </noise>
-        </z>
-      </angular_velocity>
-      <linear_acceleration>
-        <x>
-          <noise type="gaussian">
-            <mean>0.0</mean>
-            <stddev>1.7e-2</stddev>
-            <bias_mean>0.1</bias_mean>
-            <bias_stddev>0.001</bias_stddev>
-          </noise>
-        </x>
-        <y>
-          <noise type="gaussian">
-            <mean>0.0</mean>
-            <stddev>1.7e-2</stddev>
-            <bias_mean>0.1</bias_mean>
-            <bias_stddev>0.001</bias_stddev>
-          </noise>
-        </y>
-        <z>
-          <noise type="gaussian">
-            <mean>0.0</mean>
-            <stddev>1.7e-2</stddev>
-            <bias_mean>0.1</bias_mean>
-            <bias_stddev>0.001</bias_stddev>
-          </noise>
-        </z>
-      </linear_acceleration>
-    </imu>
-  </sensor>
-</gazebo>
-```
-## Step 22
-Build, source and launch. Now you should see the `/imu` topic.
-```bash
-ros2 topic list
-ros2 topic echo /imu
-```
-
-You can vizualise the IMU in rviz:
-```bash
-sudo apt install ros-humble-rviz-imu-plugin
-```
-
-Find `/imu` topic and look at the orientation.
-
-## Step 23
-Create  `config` folder in the `robot_description` package, create ekf configuration and add it to the shared path.
-```bash
-# create folder
-mkdir src/robot_description/config
-# create config file
-touch src/robot_description/config/ekf.yaml
-```
-
-In file `setup.py` add element in list `data_files`:
-```python
-('share/' + package_name + '/config', ['config/' + 'ekf.yaml'])
-```
-
-## Step 24
-Fill `ekf.yaml` with this configuration.
-```yaml
-ekf_filter_node:
-    ros__parameters:
-        frequency: 30.0
-        two_d_mode: true
-        publish_acceleration: true
-        publish_tf: true
-        map_frame: map              # Defaults to "map" if unspecified
-        odom_frame: odom            # Defaults to "odom" if unspecified
-        base_link_frame: base_footprint  # Defaults to "base_link" if unspecified
-        world_frame: odom           # Defaults to the value of odom_frame if unspecified
-
-        odom0: /odom
-        odom0_config: [true,  true,  true,
-                       false, false, false,
-                       false, false, false,
-                       false, false, true,
-                       false, false, false]
-
-        imu0: /imu
-        imu0_config: [false, false, false,
-                      true,  true,  true,
-                      false, false, false,
-                      false, false, false,
-                      false, false, false]
-```
-
-## Step 25
-Disable tf_publish in `diff_drive` in the urdf file.
-```xml
-<publish_odom_tf>false</publish_odom_tf>
-```
-
-## Step 26
-Add launching robot localization:
-```python
-robot_localization_node = Node(
-    package='robot_localization',
-    executable='ekf_node',
-    name='ekf_filter_node',
-    output='screen',
-    parameters=[
-        path.join(robot_description_path, 'config/ekf.yaml'),
-        {'use_sim_time': LaunchConfiguration('use_sim_time')}
-    ]
-)
-```
-and return the `robot_localization_node` in the list.
-
-## Step 27
-Build, source and launch.
-In Rviz compare `/odom` and `/odom/filtered` topic. Which odometry is better?
