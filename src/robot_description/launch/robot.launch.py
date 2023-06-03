@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import ExecuteProcess
+from launch.actions import ExecuteProcess, DeclareLaunchArgument
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import Command, LaunchConfiguration
 from os import path
@@ -16,19 +16,53 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        parameters=[{'robot_description': Command(['xacro ', robot_description_urdf_path])}]
+        parameters=[
+            {'robot_description': Command(['xacro ', robot_description_urdf_path])},
+            {'use_sim_time': LaunchConfiguration('use_sim_time')}
+        ]
     )
 
     spawn_robot = Node(
-    	package='gazebo_ros', 
+    	package='gazebo_ros',
     	executable='spawn_entity.py',
         arguments=['-entity', robot_name, '-topic', 'robot_description'],
         output='screen'
     )
 
-    return LaunchDescription([
-        # Run Gazebo
-        # ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so'], output='screen'),
-        robot_state_publisher_node,
+    joint_state_publisher_gui_node = Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
+        name='joint_state_publisher_gui',
+    )
 
+    joint_state_publisher_node = Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        name='joint_state_publisher',
+        parameters=[
+            {'use_sim_time': LaunchConfiguration('use_sim_time')}
+        ]
+    )
+
+    robot_localization_node = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[
+            path.join(robot_description_path, 'config/ekf.yaml'),
+            {'use_sim_time': LaunchConfiguration('use_sim_time')}
+        ]
+    )
+
+    return LaunchDescription([
+        DeclareLaunchArgument(name='use_sim_time', default_value='True',
+                                            description='Flag to enable use_sim_time'),
+        # Run Gazebo
+        ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', '/home/rabin/Documents/konar-ros2-workshop/world.sdf'], output='screen'),
+        joint_state_publisher_node,
+        # joint_state_publisher_gui_node,
+        robot_state_publisher_node,
+        spawn_robot,
+        robot_localization_node
     ])

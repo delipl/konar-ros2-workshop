@@ -10,6 +10,7 @@
 	"runArgs": [
 		"--network=host",
 		"--cap-add=SYS_PTRACE",
+		"-e DISPLAY",
 		"--security-opt=seccomp:unconfined",
 		"--security-opt=apparmor:unconfined",
 		"--volume=/tmp/.X11-unix:/tmp/.X11-unix"

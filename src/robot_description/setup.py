@@ -12,6 +12,7 @@ setup(
         ('share/' + package_name + '/resource/', ['resource/' + 'robot.urdf.xacro']),
         ('share/' + package_name + '/resource/', ['resource/' + 'macros.urdf.xacro']),
         ('share/' + package_name, ['launch/' + 'robot.launch.py']),
+        ('share/' + package_name + '/config', ['config/' + 'ekf.yaml'])
     ],
     install_requires=['setuptools'],
     zip_safe=True,
